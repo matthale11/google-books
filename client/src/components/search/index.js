@@ -20,6 +20,17 @@ function Search(props) {
     setBookSearch(value);
   };
 
+  const saveBook = (id) => {
+    const book = books.find((book) => book.id === id);
+    API.saveBook({
+      title: book.volumeInfo.title,
+      authors: book.volumeInfo.authors,
+      description: book.volumeInfo.description,
+      image: book.volumeInfo.imageLinks.smallThumbnail,
+      link: book.volumeInfo.previewLink,
+    });
+  };
+
   return (
     <div>
       <h3>Book Search</h3>
@@ -34,7 +45,7 @@ function Search(props) {
           <h3>Results</h3>
           {books.map((book) => {
             return (
-              <div>
+              <div key={book.id}>
                 <h4>{book.volumeInfo.title}</h4>
                 <h5>{book.volumeInfo.authors}</h5>
                 <p>{book.volumeInfo.description}</p>
@@ -42,6 +53,7 @@ function Search(props) {
                 <a href={book.volumeInfo.previewLink} target="_blank">
                   Link
                 </a>
+                <button onClick={() => saveBook(book.id)}>Save</button>
               </div>
             );
           })}
