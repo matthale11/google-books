@@ -10,7 +10,6 @@ function Search(props) {
     API.searchBooks(bookSearch)
       .then((apiData) => {
         setBooks(apiData.data.items);
-        console.log(apiData.data.items);
       })
       .catch((err) => console.log(err));
   }
@@ -20,7 +19,7 @@ function Search(props) {
     setBookSearch(value);
   };
 
-  const saveBook = (id) => {
+  const handleSaveBook = (id) => {
     const book = books.find((book) => book.id === id);
     API.saveBook({
       title: book.volumeInfo.title,
@@ -28,7 +27,7 @@ function Search(props) {
       description: book.volumeInfo.description,
       image: book.volumeInfo.imageLinks.smallThumbnail,
       link: book.volumeInfo.previewLink,
-    });
+    }).then(() => searchApi());
   };
 
   return (
@@ -49,11 +48,14 @@ function Search(props) {
                 <h4>{book.volumeInfo.title}</h4>
                 <h5>{book.volumeInfo.authors}</h5>
                 <p>{book.volumeInfo.description}</p>
-                <img src={book.volumeInfo.imageLinks.smallThumbnail} />
-                <a href={book.volumeInfo.previewLink} target="_blank">
+                <img
+                  src={book.volumeInfo.imageLinks.smallThumbnail}
+                  alt={book.volumeInfo.title}
+                />
+                <a href={book.volumeInfo.previewLink}>
                   Link
                 </a>
-                <button onClick={() => saveBook(book.id)}>Save</button>
+                <button onClick={() => handleSaveBook(book.id)}>Save</button>
               </div>
             );
           })}
